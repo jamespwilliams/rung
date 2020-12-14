@@ -6,7 +6,6 @@ import (
 	"log"
 	"os"
 	"regexp"
-	"strconv"
 	"strings"
 
 	. "github.com/dave/jennifer/jen"
@@ -42,7 +41,7 @@ type parsedFlag struct {
 	flag         string
 	name         string
 	flagType     string
-	defaultValue interface{}
+	defaultValue string
 	usage        string
 }
 
@@ -71,19 +70,11 @@ func parseFlags(args []string) ([]parsedFlag, error) {
 			return nil, fmt.Errorf("flag specifier %v is missing the type component", flagSpec)
 		}
 
-		var d interface{} = defaultValue
-		if flagType == "int" {
-			var err error
-			if d, err = strconv.Atoi(defaultValue); err != nil {
-				return nil, err
-			}
-		}
-
 		parsedFlags = append(parsedFlags, parsedFlag{
 			flag:         flag,
 			name:         name,
 			flagType:     flagType,
-			defaultValue: d,
+			defaultValue: defaultValue,
 			usage:        usage,
 		})
 	}
@@ -106,7 +97,7 @@ func generateMain(flags []parsedFlag) *Statement {
 	for _, flag := range flags {
 		flagPtrDefinitions = append(flagPtrDefinitions, Id(flag.name+"Ptr").Op(":=").Id("flag."+strings.Title(flag.flagType)).Call(
 			Lit(flag.flag),
-			Lit(flag.defaultValue),
+			Id(flag.defaultValue),
 			Lit(flag.usage),
 		))
 	}
