@@ -30,6 +30,7 @@ func main() {
 	flagStruct := generateFlagStruct(parsedFlags)
 
 	f := NewFile("main")
+	f.ImportName("github.com/jamespwilliams/rung", "")
 	f.ImportName("flag", "")
 	f.Add(flagStruct)
 	f.Add(generateMain(parsedFlags))
@@ -85,7 +86,7 @@ func parseFlags(args []string) ([]parsedFlag, error) {
 func generateFlagStruct(flags []parsedFlag) *Statement {
 	var fields []Code
 	for _, flag := range flags {
-		fields = append(fields, Id(flag.name).Id("rung."+strings.Title(flag.flagType)+"Flag"))
+		fields = append(fields, Id(flag.name).Qual("github.com/jamespwilliams/rung", strings.Title(flag.flagType)+"Flag"))
 	}
 
 	c := Type().Id("flagSet").Struct(fields...)
@@ -104,7 +105,7 @@ func generateMain(flags []parsedFlag) *Statement {
 
 	var flagDefinitions []Code
 	for _, flag := range flags {
-		flagDefinitions = append(flagDefinitions, Id(flag.name).Op(":=").Qual("rung", strings.Title(flag.flagType)+"Flag").Values(Dict{
+		flagDefinitions = append(flagDefinitions, Id(flag.name).Op(":=").Qual("github.com/jamespwilliams/rung", strings.Title(flag.flagType)+"Flag").Values(Dict{
 			Id("Value"): Op("*").Id(flag.name + "Ptr"),
 		}))
 	}
