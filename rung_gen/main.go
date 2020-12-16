@@ -9,14 +9,7 @@ import (
 	"strings"
 
 	. "github.com/dave/jennifer/jen"
-	"github.com/ryboe/q"
 )
-
-// input of form:
-// rung -flag1/-1:type defaultValue 'usage' -flag2/-f2:type defaultValue 'usage'
-
-// run(in io.Reader, out io.Writer, flags Flags) { ... }
-// where Flags is a struct containing rung.XYZFlags, where each rung.XYZFlag has WasSet bool, Value (whatever value)
 
 var flagRegex = regexp.MustCompile(`-(?P<flag>[a-zA-Z0-9]+)(?:/-(?P<flag_alt>[a-zA-Z0-9]+))?:(?P<type>[a-z0-9]*)`)
 
@@ -26,7 +19,6 @@ func main() {
 		log.Fatal("rung: error parsing flags:", err)
 	}
 
-	q.Q(parsedFlags)
 	flagStruct := generateFlagStruct(parsedFlags)
 
 	f := NewFile("main")
@@ -35,7 +27,6 @@ func main() {
 	f.Add(flagStruct)
 	f.Add(generateMain(parsedFlags))
 	f.Save("rung_gen.go")
-	fmt.Printf("%#v", f)
 }
 
 type parsedFlag struct {
