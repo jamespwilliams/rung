@@ -1,10 +1,10 @@
 # rung
 
-A code generating utility to make writing Golang CLI apps easier.
+A code generating utility to make Go CLI flag parsing less painful.
 
 ## Example
 
-`main.go`:
+Firstly, the Go code (`main.go`):
 
 ```golang
 package main
@@ -24,7 +24,7 @@ func run(in io.Reader, out io.Writer, flags flagSet) {
 }
 ```
 
-`flags.sh`:
+Then we just need a script to call the generation code (in `flags.sh`):
 
 ```sh
 go run github.com/jamespwilliams/rung/rung_gen \
@@ -33,10 +33,9 @@ go run github.com/jamespwilliams/rung/rung_gen \
     -quux:float64 quuxflag 10.241 "the quux flag"
 ```
 
-(I'm using a separate script here because `go:generate` directives don't support
-multiline commands.)
+That's it.
 
-Then, for example:
+Then, we can run for example:
 
 ```console
 [jpw@xyz]$ go generate .
@@ -61,6 +60,9 @@ Usage of /run/user/1000/go-build723213117/b001/exe/rungtest:
   -quux float
         the quux flag (default 10.241)
 ```
+
+Note that I'm using a separate `flags.sh` script because `go:generate`
+directives don't support multiline commands.
 
 See [this article by Mat
 Ryer](https://pace.dev/blog/2020/02/12/why-you-shouldnt-use-func-main-in-golang-by-mat-ryer.html)
