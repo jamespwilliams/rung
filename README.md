@@ -77,3 +77,8 @@ accepts argument quadruples of the following form:
 ```
 -flag:type name default "usage string"
 ```
+
+## Future Ideas
+
+The expected `run` function signature could be changed such that an `error` is
+expected, which could then be `log.Fatal`'d, for example.
