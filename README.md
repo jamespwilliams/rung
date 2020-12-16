@@ -28,9 +28,9 @@ func run(in io.Reader, out io.Writer, flags flagSet) {
 
 ```sh
 go run github.com/jamespwilliams/rung/rung_gen \
-    -foo/-f:int fooflag 10 "the foo flag" \
-    -bar/-b:bool barflag true "the bar flag" \
-    -quux/-q:float64 quuxflag 10.241 "the quux flag"
+    -foo:int fooflag 10 "the foo flag" \
+    -bar:bool barflag true "the bar flag" \
+    -quux:float64 quuxflag 10.241 "the quux flag"
 ```
 
 (I'm using a separate script here because `go:generate` directives don't support
@@ -60,4 +60,18 @@ Usage of /run/user/1000/go-build723213117/b001/exe/rungtest:
         the foo flag (default 10)
   -quux float
         the quux flag (default 10.241)
+```
+
+See [this article by Mat
+Ryer](https://pace.dev/blog/2020/02/12/why-you-shouldnt-use-func-main-in-golang-by-mat-ryer.html)
+for an explanation of why abstracting `main` out into a separate `run` function
+is useful.
+
+## Usage
+
+Really, this is more of a proof-of-concept, but anyway: the `rung_gen` binary
+accepts argument quadruples of the following form:
+
+```
+-flag:type name default "usage string"
 ```
